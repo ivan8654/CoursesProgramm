@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 use App\Models\Course;
-
 use App\Models\Application;
-
 use App\Models\Category;
 
 class CoursesController extends Controller
@@ -29,12 +28,11 @@ class CoursesController extends Controller
 	public function store_application(Request $request)
     {
         $application = new Application();
-        $application->full_name = $request->fio;
-		$application->email = $request->email;
-		$application->course_id = $request->course;
+        $application->user_id = Auth::user()->id;
+		$application->course_id = $request->course_id;
 		$application->application_date = date('Y-m-d H:i:s');
 		$application->status = 'pending';
         $application->save();
-        return $this->index();
+        return $this->index($request);
     }
 }

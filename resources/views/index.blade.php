@@ -4,7 +4,7 @@
 <a name="company"></a>
 <h1 class="company">О компании</h1>
 <p class="text-description">"Программы сферы образования" - это компания, которая специализируется на проведении курсов программирования для всех уровней. Наша миссия - помочь студентам и профессионалам приобрести навыки востребованные на рынке труда в сфере информационных технологий. Мы предлагаем широкий спектр образовательных программ, от основ программирования до продвинутых технологий разработки. Наши опытные преподаватели и индивидуальный подход к каждому студенту помогут им достичь успеха в своей карьере в IT-индустрии.</p>
-<img src="images/XXL.webp" style="height: 480px;">
+<img class="main-image" src="images/XXL.webp" style="margin-left: 18%; height: 480px;"/>
 <a name="courses"></a>
 	<h1 class="courses">Курсы</h1>
 	<form class='categories_hold' action="{{ route('index') }}" method="get">
@@ -27,6 +27,8 @@
 
                         <div class="card-body">
                             {{ $course->description }}
+                            <hr>
+                            <a href="{{ route('course.detail', ['course' => $course]) }}">Узнать больше</a>
                         </div>
                     </div>
                 @endforeach
@@ -37,24 +39,29 @@
     </div>
 	<form action="{{ route('application.store') }}" method="post">
 	@csrf
-        <div>
+        <!-- <div>
             <label for="fio">ФИО клиента:</label>
             <input type="text" id="fio" name="fio" required>
         </div>
         <div>
             <label for="email">Почта клиента:</label>
             <input type="email" id="email" name="email" required>
-        </div>
+        </div> -->
+        @auth
         <div>
             <label for="course">Выбор курса:</label>
-            <select id="course" name="course">
-				@foreach ($courses as $course)
-					<option value="{{ $course->id }}">{{ $course->title }}</option>
+            <select id="course" name="course_id">
+                @foreach ($courses as $course)
+                    <option value="{{ $course->id }}">{{ $course->title }}</option>
                 @endforeach
             </select>
         </div>
         <div>
             <button type="submit">Отправить заявку</button>
         </div>
+        @endauth
+        @guest
+            <p>Для подачи заявки необходимо зарегистрироваться</p>
+        @endguest
     </form>
 @endsection('content')

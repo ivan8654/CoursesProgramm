@@ -2,22 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Application;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Auth;
 
-class HomeController extends Controller
+class AdminController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     private const VALIDATOR = [
         'name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users'
@@ -26,9 +16,14 @@ class HomeController extends Controller
 	public function index()
     {
         $user = Auth::user();
-        $applications = $user->applications;
 
-        return view('home', ['applications' => $applications, 'user' => $user]);
+        if ($user->isAdmin == false) {
+            return abort('403');
+        }
+
+        $applications = Application::paginate(10);
+
+        return view('admin', ['applications' => $applications]);
     }
 
 	// public function store(Request $request) {
@@ -38,13 +33,12 @@ class HomeController extends Controller
 	// 	return redirect()->route('home');
 	// }
 
-	public function update(Request $request) {
-        $request->validate(self::VALIDATOR);
-        $user = Auth::user();
-        $user->email = $request->email;
-        $user->name = $request->name;
-        $user->save();
-		return redirect()->route('home');
-	}
-	
+	// public function update(Request $request) {
+    //     $request->validate(self::VALIDATOR);
+    //     $user = Auth::user();
+    //     $user->email = $request->email;
+    //     $user->name = $request->name;
+    //     $user->save();
+	// 	return redirect()->route('home');
+	// }
 }

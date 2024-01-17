@@ -1,31 +1,44 @@
 @extends('layouts.app')
 
-@section('title', 'Мои Заявки')
+@section('title', 'Личный кабинет')
 
 @section('content')
-<p class="text-end"><a href="{{ route('course.create') }}">Добавить курс</a></p>
+
+<form action="{{ route('user.update') }}" method="post" style="margin-top:20px;">
+	@csrf
+	<div class="mb-3">Персональные данные</div>
+	<div class="mb-3">
+		<label for="txtEmail" class="form-label">Email</label>
+		<input name="email" type="email" id="txtEmail" value="{{ $user->email }}" class="form-control @error('email') is-invalid @enderror">
+		@error('email')
+		<div class="invalid-feedback">{{ $message }}</div>
+		@enderror
+	</div>
+	<div class="mb-3">
+		<label for="txtName" class="form-label">ФИО</label>
+		<input name="name" id="txtName" value="{{ $user->name }}" class="form-control @error('name') is-invalid @enderror">
+		@error('name')
+		<div class="invalid-feedback">{{ $message }}</div>
+		@enderror
+	</div>
+	<input type="submit" class="btn btn-primary" value="Сохранить">
+</form>
+
 @if (count($applications) > 0)
 <table class="table table-striped table-borderless">
 	<thead>
 		<tr>
-			<th>Название</th>
-			<th>Короткое описание</th>
-			<th>Категория</th>
-			<th colspan="2">&nbsp;</th>
+			<th>Название курса</th>
+			<th>Дата заявки</th>
+			<th>Статус</th>
 		</tr>
 	</thead>
 	<tbody>
 		@foreach ($applications as $application)
 		<tr>
-			<td><h3>{{ $application->name }}</h3></td>
-			<td>{{ $application->short_description }}</td>
-			<td>{{ $application->category }}</td>
-			<td>
-				<a href="{{ route('application.edit', ['id' => $application->id]) }}">Изменить</a>
-			</td>
-			<td>
-				<a href="{{ route('application.delete', ['id' => $application->id]) }}">Удалить</a>
-			</td>
+			<td><h3>{{ $application->course->title }}</h3></td>
+			<td>{{ $application->application_date }}</td>
+			<td>{{ $application->status }}</td>
 		</tr>
 		@endforeach
 	</tbody>

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,9 +17,15 @@ use App\Http\Controllers\HomeController;
 */
 
 Route::get('/', [CoursesController::class, 'index'])->name('index');
-Route::get('/{id}', [CoursesController::class, 'detail'])->name('detail');
+
 Auth::routes();
+
 Route::get('/home/create', [HomeController::class, 'create'])->name('course.create');
-Route::post('/home', [HomeController::class, 'store'])->name('course.store');
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::post('/home', [HomeController::class, 'store'])->name('course.store');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::post('/home/user-update', [HomeController::class, 'update'])->name('user.update');
 Route::post('/store-application', [CoursesController::class, 'store_application'])->name('application.store');
+
+Route::get('/admin', [AdminController::class, 'index'])->name('admin.home');
+
+Route::get('/{course}', [CoursesController::class, 'detail'])->name('course.detail');
