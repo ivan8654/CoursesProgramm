@@ -21,4 +21,4 @@ Auth::routes();
 Route::get('/home/create', [HomeController::class, 'create'])->name('course.create');
 Route::post('/home', [HomeController::class, 'store'])->name('course.store');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::post('/store-application', [CoursesController::class, 'store_application'])->name('application.store');
+Route::post('/store-application', [CourseыController::class, 'store_application'])->name('application.store');
