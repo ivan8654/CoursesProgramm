@@ -18,7 +18,7 @@ class CoursesController extends Controller
 		} else {
 			$courses = Course::paginate(3);
 		}
-		$categories = Category::paginate(3);
+		$categories = Category::all();
 
         return view('index', ['courses' => $courses, 'categories' => $categories]);
     }
